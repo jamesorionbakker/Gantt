@@ -15,7 +15,7 @@ function printCalender() {
     let calenderGridItem = '';
     let monthBarContent = '';
     let daysInCurMonth = 0;
-    for (let i = 0; i < 665; i++) {
+    for (let i = 0; i < ui.daysToLoad; i++) {
         let currentDate = new Date(calenderStartDate);
         currentDate.setDate(currentDate.getDate() + i);
         let tomorrowsDate = new Date(currentDate);
