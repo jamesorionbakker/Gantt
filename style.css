@@ -232,19 +232,38 @@ span.date-num {
     margin-top: var(--task-li-margin);
     margin-bottom: var(--task-li-margin);
     background-color: #f5f4f3;
+    cursor: grab;
 }
-
+.task-group-container {
+    margin-left: 20px;
+    
+}
 .task-li {
+    padding-left: 25px;
     font-size: .9em;
-    padding-left: 50px;
     height: calc(var(--task-li-height) - var(--task-li-margin));
     margin-top: var(--task-li-margin);
     margin-bottom: var(--task-li-margin);
     line-height: calc(var(--task-li-height) - var(--task-li-margin));
+    background-color: #fcfcfc;    
+    cursor: grab;
 }
 
 .task-li:hover {
     background-color: #f5f4f3;
+}
+.task-list-target-container {
+    pointer-events: none;
+    width: var(--task-area-width);
+    position: absolute;
+    top: calc(var(--month-bar-height) + var(--day-date-char-height) + var(--day-date-char-height));
+}
+.task-list-target {
+    pointer-events: all;
+    margin-top: calc(var(--task-li-height) - var(--task-li-margin));
+    height: var(--task-li-margin);
+    width: calc(var(--task-area-width));
+    opacity: .5;
 }
 
 .collapse-arrow {
@@ -252,6 +271,7 @@ span.date-num {
     height: 1;
     width: 1em;
     line-height: calc(var(--task-li-height) - var(--task-li-margin));
+    cursor: pointer;
 }
 
 .task-assignment {
@@ -337,6 +357,9 @@ span.date-num {
 
 .inline-edit {
     border: 1px solid #eaeaea;
+}
+.editable {
+    cursor: text;
 }
 
 .popup {

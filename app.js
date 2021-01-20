@@ -36,9 +36,11 @@ class Item {
         this.id = ''
         this.name = ''
         this.type = ''
-        this.previous = ''
-        this.next = ''
-        this.firstChild = ''
+        this.previous = null
+        this.next = null
+        this.firstChild = null
+        this.lastChild = null
+        this.parent = null
         
         this.startDate = ''
         this.endDate = ''
@@ -120,7 +122,7 @@ item6.firstChild = 100;
 item6.parent = null;
 
 let itemArray = [item1, item2, item3, item4, item5, item6];
-
+itemArray = [];
     
 
 

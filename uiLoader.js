@@ -50,4 +50,26 @@ function printCalender() {
     ui.monthBar.insertAdjacentHTML('beforeend', monthBarContent);
 }
 printCalender();
+store.get();
 tasks.print();
+
+
+
+
+
+
+
+
+
+
+
+//if(day.type === today){getDrink(cocktail,3)};
+
+
+
+
+
+
+
+
+
