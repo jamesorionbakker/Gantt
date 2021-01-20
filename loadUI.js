@@ -49,6 +49,7 @@ function printCalender() {
     ui.calenderGrid.insertAdjacentHTML('beforeend', calenderGridItem);
     ui.monthBar.insertAdjacentHTML('beforeend', monthBarContent);
 }
+
 printCalender();
 store.get();
 tasks.print();
