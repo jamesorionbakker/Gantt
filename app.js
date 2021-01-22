@@ -34,23 +34,19 @@ let ui = new UI();
 class Store {
     constructor() {
         this.storageName = 'gantt'
-
     }
     get() {
-        //console.log('getting from storage')
         let data = localStorage.getItem(this.storageName);
         if (data) {
             data = JSON.parse(data);
             return data;
             console.log(data);
-        } else {
-            //console.log('there is nothing in storage');
-        }
+        } else {}
     }
     set(object) {
         localStorage.setItem(this.storageName, JSON.stringify(object));
     }
-    clear(){
+    clear() {
         localStorage.clear();
     }
 }
@@ -69,12 +65,10 @@ class NewTaskForm {
         this.percentCompleted = document.querySelector('#inputTaskPercentCompleted');
         this.createTaskSubmit = document.querySelector('#createNewTask');
         this.sampletext = 'sample';
-
     }
 
-    submit() { //create new task
+    submit() {
         if (this.validate()) {
-
             let newItem = new Item()
             let position = '';
             let reference;
@@ -97,8 +91,6 @@ class NewTaskForm {
             newItem.percentComplete = this.percentCompleted.value;
             tasks.new(newItem, position, reference);
 
-
-
             $('#newItemModal').modal('hide');
             this.name.value = null;
             this.group.selectedIndex = null;
@@ -107,7 +99,6 @@ class NewTaskForm {
             this.percentCompleted.value = null;
             this.startDate.value = null
             this.endDate.value = null;
-
         }
     }
     alert(msg) {
@@ -185,7 +176,6 @@ class InlineEdit {
             return true;
         }
     }
-
     queryArray(classList, string) {
         for (let i = 0; i < classList.length; i++) {
             if (classList[i] === string) {
@@ -194,7 +184,6 @@ class InlineEdit {
         }
         return false;
     }
-
     edit(e) {
 
         let targetIdStr = e.target.id;;
@@ -294,9 +283,6 @@ class GanttLine {
                     return;
                 }
                 lastMousePosX = e2.clientX;
-
-
-
                 e2.preventDefault;
                 let curX = e2.clientX;
                 let curY = e2.clientY;
@@ -358,7 +344,7 @@ class Item {
         this.firstChild = null
         this.lastChild = null
         this.parent = null
-        
+
         this.startDate = ''
         this.endDate = ''
         this.color = ''
@@ -370,7 +356,6 @@ class Item {
 
 class Tasks {
     constructor(data) {
-        console.log(data.taskArray);
         if (data.taskArray.length < 1) {
             this.first = null;
             this.last = null;
@@ -424,11 +409,12 @@ class Tasks {
         }
 
         if (my.type === 'group') {
-            response += `<div draggable="true" id="${my.id}" class="task-group-title"><div data-id="${my.id}" class="collapse-arrow"><i class="${collapseArrow} collapse-icon"></i></div><span id="name,${my.id}" class="editable">${my.name}</span></div>`
+            response += `<div draggable="true" id="${my.id}" class="task-group-title"><div data-id="${my.id}" class="collapse-arrow"><i class="${collapseArrow} collapse-icon"></i></div><span id="name,${my.id}" class="editable semi-bold">${my.name}</span><div class="task-progress"><span id="percentComplete,${my.id}" class="editable percentage">${my.percentComplete}%</span></div>
+                                    <div class="task-assignment"><span id="assignment,${my.id}" class="editable text">${my.assignment}</span></div><div class="task-actions" data-id="${my.id}"><i class="fas fa-plus"></i><i class="fas fa-trash-alt"></i></div></div>`
         }
         if (my.type === 'task') {
-            response += `<div draggable="true" id="${my.id}" class="task-li"><span id="name,${my.id}" class="editable">${my.name}</span><div class="task-progress"><span id="percentComplete,${my.id}" class="editable percentage">${my.percentComplete}%</span></div>
-                                    <div class="task-assignment"><span id="assignment,${my.id}" class="editable text">${my.assignment}</span></div></div>`
+            response += `<div draggable="true" id="${my.id}" class="task-li"><span id="name,${my.id}" class="editable ">${my.name}</span><div class="task-progress"><span id="percentComplete,${my.id}" class="editable percentage">${my.percentComplete}%</span></div>
+                                    <div class="task-assignment"><span id="assignment,${my.id}" class="editable text">${my.assignment}</span></div><div class="task-actions" data-id="${my.id}"><i class="fas fa-edit"></i><i class="fas fa-trash-alt"></i></div></div>`
         }
         if (this.isDisplayed(my.id)) {
             this.printedItemArray.push(my);
@@ -586,13 +572,11 @@ class Tasks {
             return;
         }
         let item = this[itemID];
-
         let previous = item.previous;
         let next = item.next;
         let parent = item.parent;
         let firstChild = item.firstChild;
         let lastChild = item.lastChild;
-
 
         //middle child of parent
         if (previous && next) {
@@ -785,17 +769,11 @@ class GUISchedule {
             ui.ganttLineCreate.style.width = ui.gridWidth + 'px';
             ui.ganttLineCreate.style.top = e.target.style.top;
             document.removeEventListener('mouseup', this.releaseEvent);
-
             this.leftToolTip = ui.ganttLineCreate.firstChild;
             this.rightToolTip = ui.ganttLineCreate.lastChild;
-
             this.left = parseInt(ui.ganttLineCreate.style.left);
-
-
             this.leftToolTip.innerHTML = ui.gridToDate(this.left);
             this.leftToolTip.style.visibility = 'visible';
-
-
         }
     }
 
@@ -867,7 +845,6 @@ class RearrangeList {
             document.querySelector('.editable').style.pointerEvents = 'none';
             this.draggedItemID = parseInt(e.target.id)
             document.querySelectorAll('.editable').forEach(function (item) {
-
                 item.style.pointerEvents = 'none';
             })
         }
@@ -941,6 +918,8 @@ class RearrangeList {
         document.querySelector('.editable').style.pointerEvents = 'text';
     }
 }
+
+
 let tasks;
 if (store.get()) {
     tasks = new Tasks(store.get());
@@ -957,6 +936,105 @@ let inlineEdit = new InlineEdit;
 let ganttLine = new GanttLine;
 let guiSchedule = new GUISchedule();
 let rearrangeList = new RearrangeList();
+
+class TaskListActions {
+    constructor() {
+        $('.task-list').on("mouseenter mouseleave", '.task-li, .task-group-title', function (e) {
+            if (e.type == "mouseenter") {
+                this.querySelector('.task-actions').style.display = 'block';
+                // check if it is mouseenter, do something
+            } else {
+                this.querySelector('.task-actions').style.display = 'none';
+                // if not, mouseleave, do something
+            }
+        });
+
+        $('.task-list').on('click', '.fa-trash-alt', function (e) {
+            tasks.delete(parseInt(e.target.parentElement.getAttribute('data-id')));
+        })
+        $('.task-list').on('click', '.fa-edit', this.editTaskModal.bind(this));
+        $('.task-list').on('click', '.fa-plus', function (e) {
+            console.log('open new task modal')
+
+            let groupID = parseInt(e.target.parentElement.getAttribute('data-id'));
+            let groupName = tasks[groupID].name;
+
+            let groupSelect = `<option value='none'>None</option><option selected value="${groupID}">${groupName}</option>`;
+
+            for (let i = 0; i < tasks.printedItemArray.length; i++) {
+                let my = tasks.printedItemArray[i];
+                if (my.type === 'group' && my.id !== groupID) {
+                    groupSelect += `<option value="${my.id}">${my.name}</option>`;
+                }
+            }
+            document.querySelector('#inputTaskGroup').innerHTML = groupSelect;
+            $('#newItemModal').modal('show');
+        });
+
+        $('#editTaskModal #saveChanges').submit(this.saveChanges.bind(this));
+        //document.querySelector('#inputTaskGroup');
+    }
+    editTaskModal(e) {
+        let taskID = parseInt(e.target.parentElement.getAttribute('data-id'));
+        this.currentlyEditing = taskID
+        let taskGroupName;
+        let taskGroupId;
+        let taskStartDateString = '';
+        let taskEndDateString = '';
+        if (tasks[taskID].startDate) {
+            let taskStartDate = new Date(tasks[taskID].startDate);
+            taskStartDateString = `${taskStartDate.getFullYear()}-${(taskStartDate.getMonth() + 1).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})}-${taskStartDate.getDate()}`;
+            let taskEndDate = new Date(tasks[taskID].endDate);
+            taskEndDateString = `${taskEndDate.getFullYear()}-${(taskEndDate.getMonth() + 1).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})}-${taskEndDate.getDate()}`;
+        }
+        if (tasks[taskID].parent) {
+            taskGroupName = tasks[tasks[taskID].parent].name;
+            taskGroupId = tasks[taskID].parent;
+        } else {
+            taskGroupName = 'none';
+            taskGroupId = null;
+        }
+
+        let groupSelect = `<option selected value="${taskGroupId}">${taskGroupName}</option>`;
+
+        for (let i = 0; i < tasks.printedItemArray.length; i++) {
+            let my = tasks.printedItemArray[i];
+            if (my.type === 'group' && my.id !== taskGroupId) {
+                groupSelect += `<option value="${my.id}">${my.name}</option>`;
+            }
+        }
+        document.querySelector('#editTaskModal #inputEditTaskName').value = tasks[taskID].name;
+        document.querySelector('#editTaskModal #inputEditTaskColor').value = tasks[taskID].color;
+        document.querySelector('#editTaskModal #inputEditTaskAssignment').value = tasks[taskID].assignment;
+        document.querySelector('#editTaskModal #inputEditTaskPercentCompleted').value = tasks[taskID].percentComplete;
+        document.querySelector('#editTaskModal #inputEditTaskStartDate').value = taskStartDateString;
+        document.querySelector('#editTaskModal #inputEditTaskEndDate').value = taskEndDateString;
+        document.querySelector('#editTaskModal #inputEditTaskGroup').innerHTML = groupSelect;
+
+        $('#editTaskModal').modal('show');
+    }
+    saveChanges(e) {
+        e.preventDefault();
+        let id = this.currentlyEditing;
+        tasks[id].name = document.querySelector('#editTaskModal #inputEditTaskName').value;
+        tasks[id].color = document.querySelector('#editTaskModal #inputEditTaskColor').value;
+        tasks[id].assignment = document.querySelector('#editTaskModal #inputEditTaskAssignment').value;
+        tasks[id].percentComplete = document.querySelector('#editTaskModal #inputEditTaskPercentCompleted').value;
+        tasks[id].startDate = new Date(document.querySelector('#editTaskModal #inputEditTaskStartDate').value + 'PST');
+        tasks[id].endDate = new Date(document.querySelector('#editTaskModal #inputEditTaskEndDate').value + 'PST');
+
+        $('#editTaskModal').modal('hide');
+
+        let selectedGroupID = parseInt(document.querySelector('#editTaskModal #inputEditTaskGroup').value)
+
+        if (selectedGroupID !== tasks[id].parent) {
+            tasks.move(id, 'inside', selectedGroupID);
+        } else {
+            tasks.print();
+        }
+    }
+}
+let taskListActions = new TaskListActions;
 
 
 newTaskForm.createTaskSubmit.addEventListener('submit', function (e) {

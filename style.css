@@ -18,6 +18,9 @@ body {
     font-size: .9em;
     font-weight: 400;
 }
+.semi-bold {
+    font-weight: 500;
+}
 
 .left-bar {
     position: fixed;
@@ -402,8 +405,21 @@ span.date-num {
     border-style: solid;
     border-color: #eaeaea transparent transparent transparent;
 }
+.task-actions {
+    display: none;
+    float:right;
+    width: 50px;
+    text-align: center;
+    line-height: calc(var(--task-li-height) - var(--task-li-margin));
+}
+.task-actions i {
+    margin-left: 10px;
+    cursor: pointer;
+}
 
 /*
 .tooltip:hover .tooltip-text {
   visibility: visible;
 }*/
+.test {
+}

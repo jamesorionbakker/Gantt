@@ -41,7 +41,7 @@
         </div>
         <div class="calender-container">
             <div class="calender-target-container">
-               <div></div>
+                <div></div>
                 <div class="gantt-line-create tip"><span style="left: 0%;" class="tooltip-text">Tooltip text</span><span style="visibility: hidder; left: 100%;" class="tooltip-text">Tooltip text</span></div>
             </div>
             <div class="calender-item-container">
@@ -157,6 +157,76 @@
 
 
 
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="editTaskModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div id="newTaskFormModal" class="modal-body">
+                    <div id="newTaskFormError"></div>
+                    <div id="newGroupFormError"></div>
+                    <div class="tab-content" id="myTabContent">
+                        <form id="saveChanges">
+                            <div class="container-fluid">
+
+                                <div class="row">
+                                    <div class="col-sm-12"><label for="inputEditTaskName" class="form-label">Task Name</label></div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-sm-10">
+
+                                        <input type="text" class="form-control" id="inputEditTaskName" placeholder="">
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <input type="color" class="form-control form-control-color" id="inputEditTaskColor" value="#1E77Eb" title="Choose your color">
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-sm-5">
+                                        <label for="inputEditTaskGroup" class="form-label">Group</label>
+                                        <select class="form-select" id="inputEditTaskGroup" aria-label="Default select example">
+                                            <option selected>Select a Group</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <label for="inputEditTaskAssignment" class="form-label">Assign to User</label>
+                                        <select class="form-select" id="inputEditTaskAssignment" aria-label="Default select example">
+                                            <option selected>User 1</option>
+                                            <option value="1">One</option>
+                                            <option value="2">Two</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <label for="inputEditTaskPercentCompleted" class="form-label">% Completed</label>
+                                        <input type="number" class="form-control" id="inputEditTaskPercentCompleted" placeholder="">
+                                    </div>
+                                </div>
+                                <div class="row mb-5">
+                                    <div class="col-sm-6">
+                                        <label for="inputEditTaskStartDate" class="form-label">Start Date</label>
+                                        <input type="date" class="form-control" id="inputEditTaskStartDate">
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label for="inputEditTaskEndDate" class="form-label">End Date</label>
+                                        <input type="date" class="form-control" id="inputEditTaskEndDate">
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" id="closeModal" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Confirm Task</button>
+                            </div>
+                        </form>
+
+                    </div>
                 </div>
             </div>
         </div>
