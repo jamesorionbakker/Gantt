@@ -1,4 +1,7 @@
-let calenderStartDate = new Date('1/10/2021');
+let calenderStartDate = new Date(Date.now() - 604800000);
+let calenderEndDate = new Date(calenderStartDate);
+calenderEndDate.setDate(calenderEndDate.getDate() + 365);
+
 let todaysDate = new Date(Date.now());
 
 class UI {
@@ -376,6 +379,7 @@ class Tasks {
         this.printedItemArray = []
         this.saveArray = [];
         ui.taskList.innerHTML = this.compileTaskList(item, scope);
+        this.setDateRange();
         ui.calenderItemContainer.innerHTML = this.printGanttItems();
         newTaskForm.group.innerHTML = this.populateNewTaskForm();
         this.printGanttTargets();
@@ -441,7 +445,20 @@ class Tasks {
         this.last = my.id;
         return response;
     }
+    setDateRange() {
+        this.saveArray.forEach(function (my) {
+            let myStartDate = new Date(my.startDate).getTime();
+            let myEndDate = new Date(my.endDate).getTime();
 
+            if (myStartDate - 604800000 < calenderStartDate.getTime()) {
+                calenderStartDate = new Date(myStartDate - 604800000);
+            }
+            if (myEndDate + 31536000000 > calenderEndDate.getTime()) {
+                calenderEndDate = new Date(myEndDate + 31536000000);
+            }
+        })
+        printCalender();
+    }
     isDisplayed(id) {
         let displayed = true;
         this.itemsToHide.forEach(function (hiddenItemId) {

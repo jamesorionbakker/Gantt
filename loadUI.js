@@ -10,7 +10,31 @@ let monthArr = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 
 let displayedDateArray = []
 
 function printCalender() {
+    if (localStorage.getItem('gantt')) {
+        let tasksArray = JSON.parse(localStorage.getItem('gantt')).taskArray;
+        tasksArray.forEach(function (my) {
+            if (my.startDate && my.type === 'task') {
+                let myStartDate = new Date(my.startDate).getTime();
+                let myEndDate = new Date(my.endDate).getTime();
 
+                if (myStartDate - 604800000 < calenderStartDate.getTime()) {
+                    calenderStartDate = new Date(myStartDate - 604800000);
+                }
+                if (myEndDate + 31536000000 > calenderEndDate.getTime()) {
+                    calenderEndDate = new Date(myEndDate + 31536000000);
+                }
+
+            }
+        })
+    }
+    
+    ui.daysToLoad = Math.ceil((calenderEndDate.getTime() - calenderStartDate.getTime()) / 86400000)
+    console.log('days to load: '+ ui.daysToLoad);
+    console.log('start Date: ' + calenderStartDate)
+    console.log('end Date: ' + calenderEndDate)
+    
+    
+    
     displayedDateArray = [];
     let calenderGridItem = '';
     let monthBarContent = '';
@@ -40,8 +64,8 @@ function printCalender() {
         }
         displayedDateArray.push(currentDate.getTime());
     }
-    ui.calenderGrid.insertAdjacentHTML('beforeend', calenderGridItem);
-    ui.monthBar.insertAdjacentHTML('beforeend', monthBarContent);
+    ui.calenderGrid.innerHTML = calenderGridItem;
+    ui.monthBar.innerHTML = monthBarContent;
 }
 printCalender();
 store.get();
