@@ -347,6 +347,8 @@ class Item {
         this.firstChild = null
         this.lastChild = null
         this.parent = null
+        this.drives = [];
+        this.drivenBy = null
 
         this.startDate = ''
         this.endDate = ''
@@ -384,6 +386,7 @@ class Tasks {
         newTaskForm.group.innerHTML = this.populateNewTaskForm();
         this.printGanttTargets();
         this.printTaskTargets();
+        this.printDependencies();
         store.set({
             'taskArray': this.saveArray,
             'hiddenItemsArray': this.itemsToHide,
@@ -447,14 +450,17 @@ class Tasks {
     }
     setDateRange() {
         this.saveArray.forEach(function (my) {
-            let myStartDate = new Date(my.startDate).getTime();
-            let myEndDate = new Date(my.endDate).getTime();
+            if (my.startDate && my.endDate) {
 
-            if (myStartDate - 604800000 < calenderStartDate.getTime()) {
-                calenderStartDate = new Date(myStartDate - 604800000);
-            }
-            if (myEndDate + 31536000000 > calenderEndDate.getTime()) {
-                calenderEndDate = new Date(myEndDate + 31536000000);
+                let myStartDate = new Date(my.startDate).getTime();
+                let myEndDate = new Date(my.endDate).getTime();
+
+                if (myStartDate - 604800000 < calenderStartDate.getTime()) {
+                    calenderStartDate = new Date(myStartDate - 604800000);
+                }
+                if (myEndDate + 31536000000 > calenderEndDate.getTime()) {
+                    calenderEndDate = new Date(myEndDate + 31536000000);
+                }
             }
         })
         printCalender();
@@ -488,9 +494,73 @@ class Tasks {
             let msTaskLength = taskEndTime.getTime() - taskStartTime.getTime();
             let pixelWidth = Math.floor((msTaskLength / 86400000) * ui.gridWidth);
 
-            response += `<div id="${my.id}" style="top: ${pixelsTop}px;left: ${pixelsLeft}px;width: ${pixelWidth}px; background-color: ${my.color}" data-start-time="${taskStartTime.getTime()}" data-end-time="${taskEndTime.getTime()}" data-desc="gantt-line-for-${my.id}"class="gantt-line"><div class="handle-left tip" ><span class="tooltip-text">Tooltip text</span></div><div class="handle-right tip"><span class="tooltip-text">Tooltip text</span></div></div>`
+            response += `<div id="${my.id}" style="top: ${pixelsTop}px;left: ${pixelsLeft}px;width: ${pixelWidth}px; background-color: ${my.color}" data-start-time="${taskStartTime.getTime()}" data-end-time="${taskEndTime.getTime()}" data-desc="gantt-line-for-${my.id}"class="gantt-line" data-id="${my.id}"><div class="handle-left tip" ><span class="tooltip-text">Tooltip text</span></div><div class="handle-right tip"><span class="tooltip-text">Tooltip text</span></div></div>`
         }
         return response;
+    }
+    printDependencies() {
+        let response = '';
+        this.printedItemArray.forEach((my, i) => {
+            if (my.drives) {
+                console.log(my);
+                my.drives.forEach((drivenID, j) => {
+                    if (tasks[drivenID].startDate) {
+                        // console.log(`${my.id} drives ${this[my.drives].id}`);
+                        let taskStartTime = new Date(my.startDate);
+                        let msFromCalStartDate = taskStartTime.getTime() - calenderStartDate.getTime();
+                        let driverLeft = Math.floor((msFromCalStartDate / 86400000) * ui.gridWidth);
+
+                        //calculate Y position
+                        let driverTop = ui.calenderTopOffset + (ui.gridHeight * i);
+
+                        //calculate width
+                        let taskEndTime = new Date(my.endDate);
+                        let msTaskLength = taskEndTime.getTime() - taskStartTime.getTime();
+                        let driverWidth = Math.floor((msTaskLength / 86400000) * ui.gridWidth);
+                        let driven = {};
+                        driven.element = ui.calenderItemContainer.querySelector(`[data-id="${drivenID}"]`);
+                        console.log(driven.element);
+                        driven.top = parseInt(driven.element.style.top);
+                        driven.left = parseInt(driven.element.style.left);
+
+
+                        let line = {}
+                        console.log(driverTop + '<' + driven.top)
+                        console.log(driven);
+                        if (driverTop < driven.top) { //driver is above driven
+                            console.log('driver above')
+                            line.originX = driverLeft + driverWidth;
+                            line.originY = driverTop + (ui.gridHeight / 2) + 4;
+                            line.destX = driven.left + (parseInt(driven.element.style.width) / 3) + (5 * j);
+                            line.destY = driven.top;
+                            line.width = line.destX - line.originX;
+                            line.height = Math.abs(line.destY - line.originY + 8);
+
+                            response += `<div class="dependency-line" style="top: ${line.originY}px; left:${line.originX}px; width: ${line.width}px; height:${line.height}px; border-top: 2px solid ${tasks[drivenID].color}; border-right: 2px solid ${tasks[drivenID].color}; border-top-right-radius: 5px;"></div>`;
+                        }
+                        if (driverTop > driven.top) {
+                            console.log('inverted');
+                            line.originX = driverLeft + driverWidth;
+                            line.originY = driverTop + (ui.gridHeight / 2) + 4;
+                            line.destX = driven.left + (parseInt(driven.element.style.width) / 3) + (5 * j);
+                            line.destY = driven.top;
+                            line.width = line.destX - line.originX;
+                            line.height = Math.abs(line.destY - line.originY) - ui.gridHeight;
+
+                            response += `<div class="dependency-line" style="top: ${line.originY - line.height}px; left:${line.originX}px; width: ${line.width}px; height:${line.height}px; border-bottom: 2px solid ${tasks[drivenID].color}; border-right: 2px solid ${tasks[drivenID].color}; border-bottom-right-radius: 5px;"></div>`;
+                        }
+
+
+
+//                        response += `<div class="dependency-line" style="top: ${line.destY}px; left:${line.originX}px; width: ${line.width}px; height:${line.height}px; border-bottom: 2px solid ${tasks[driven].color}; border-right: 2px solid ${tasks[driven].color};border-bottom-right-radius: 5px;"></div>`;
+
+
+                    }
+                })
+            }
+        })
+
+        document.querySelector('.dependency-container').innerHTML = response;
     }
     populateNewTaskForm() {
         let response = `<option value="none">None</option>`;
@@ -1009,7 +1079,7 @@ class TaskListActions {
             taskGroupId = tasks[taskID].parent;
         } else {
             taskGroupName = 'none';
-            taskGroupId = null;
+            taskGroupId = 'null';
         }
 
         let groupSelect = `<option selected value="${taskGroupId}">${taskGroupName}</option>`;
@@ -1037,12 +1107,28 @@ class TaskListActions {
         tasks[id].color = document.querySelector('#editTaskModal #inputEditTaskColor').value;
         tasks[id].assignment = document.querySelector('#editTaskModal #inputEditTaskAssignment').value;
         tasks[id].percentComplete = document.querySelector('#editTaskModal #inputEditTaskPercentCompleted').value;
-        tasks[id].startDate = new Date(document.querySelector('#editTaskModal #inputEditTaskStartDate').value + 'PST');
-        tasks[id].endDate = new Date(document.querySelector('#editTaskModal #inputEditTaskEndDate').value + 'PST');
+        console.log(document.querySelector('#editTaskModal #inputEditTaskStartDate').value)
+
+        function validateDate(testdate) {
+            var date_regex = /^((0|1)\d{1})-((0|1|2)\d{1})-((19|20)\d{2})/;
+            return date_regex.test(testdate);
+        }
+        console.log(document.querySelector('#editTaskModal #inputEditTaskStartDate').value)
+
+        if (document.querySelector('#editTaskModal #inputEditTaskStartDate').value && document.querySelector('#editTaskModal #inputEditTaskEndDate').value) {
+            tasks[id].startDate = new Date(document.querySelector('#editTaskModal #inputEditTaskStartDate').value + 'PST');
+            tasks[id].endDate = new Date(document.querySelector('#editTaskModal #inputEditTaskEndDate').value + 'PST');
+        }
 
         $('#editTaskModal').modal('hide');
 
-        let selectedGroupID = parseInt(document.querySelector('#editTaskModal #inputEditTaskGroup').value)
+        let selectedGroupID;
+
+        if (document.querySelector('#editTaskModal #inputEditTaskGroup').value == 'null') {
+            selectedGroupID = null
+        } else {
+            selectedGroupID = parseInt(document.querySelector('#editTaskModal #inputEditTaskGroup').value)
+        }
 
         if (selectedGroupID !== tasks[id].parent) {
             tasks.move(id, 'inside', selectedGroupID);
@@ -1052,7 +1138,6 @@ class TaskListActions {
     }
 }
 let taskListActions = new TaskListActions;
-
 
 newTaskForm.createTaskSubmit.addEventListener('submit', function (e) {
     e.preventDefault();

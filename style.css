@@ -18,6 +18,7 @@ body {
     font-size: .9em;
     font-weight: 400;
 }
+
 .semi-bold {
     font-weight: 500;
 }
@@ -237,10 +238,12 @@ span.date-num {
     background-color: #f5f4f3;
     cursor: grab;
 }
+
 .task-group-container {
     margin-left: 20px;
-    
+
 }
+
 .task-li {
     padding-left: 25px;
     font-size: .9em;
@@ -248,19 +251,21 @@ span.date-num {
     margin-top: var(--task-li-margin);
     margin-bottom: var(--task-li-margin);
     line-height: calc(var(--task-li-height) - var(--task-li-margin));
-    background-color: #fcfcfc;    
+    background-color: #fcfcfc;
     cursor: grab;
 }
 
 .task-li:hover {
     background-color: #f5f4f3;
 }
+
 .task-list-target-container {
     pointer-events: none;
     width: var(--task-area-width);
     position: absolute;
     top: calc(var(--month-bar-height) + var(--day-date-char-height) + var(--day-date-char-height));
 }
+
 .task-list-target {
     pointer-events: all;
     margin-top: calc(var(--task-li-height) - var(--task-li-margin));
@@ -361,6 +366,7 @@ span.date-num {
 .inline-edit {
     border: 1px solid #eaeaea;
 }
+
 .editable {
     cursor: text;
 }
@@ -405,21 +411,28 @@ span.date-num {
     border-style: solid;
     border-color: #eaeaea transparent transparent transparent;
 }
+
 .task-actions {
     display: none;
-    float:right;
+    float: right;
     width: 50px;
     text-align: center;
     line-height: calc(var(--task-li-height) - var(--task-li-margin));
 }
+
 .task-actions i {
     margin-left: 10px;
     cursor: pointer;
+}
+
+.dependency-line {
+    z-index: 20;
+    position: absolute;
+    pointer-events: none;
 }
 
 /*
 .tooltip:hover .tooltip-text {
   visibility: visible;
 }*/
-.test {
-}
+.test {}
