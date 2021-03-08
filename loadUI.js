@@ -11,8 +11,8 @@ let displayedDateArray = []
 
 function printCalender() {
     if (localStorage.getItem('gantt')) {
-        let tasksArray = JSON.parse(localStorage.getItem('gantt')).taskArray;
-        tasksArray.forEach(function (my) {
+        let itemArray = JSON.parse(localStorage.getItem('gantt')).items;
+        itemArray.forEach(function (my) {
             if (my.startDate && my.type === 'task') {
                 let myStartDate = new Date(my.startDate).getTime();
                 let myEndDate = new Date(my.endDate).getTime();
@@ -28,10 +28,7 @@ function printCalender() {
         })
     }
     
-    ui.daysToLoad = Math.ceil((calenderEndDate.getTime() - calenderStartDate.getTime()) / 86400000)
-    console.log('days to load: '+ ui.daysToLoad);
-    console.log('start Date: ' + calenderStartDate)
-    console.log('end Date: ' + calenderEndDate)
+    daysToLoad = Math.ceil((calenderEndDate.getTime() - calenderStartDate.getTime()) / 86400000)
     
     
     
@@ -39,7 +36,7 @@ function printCalender() {
     let calenderGridItem = '';
     let monthBarContent = '';
     let daysInCurMonth = 0;
-    for (let i = 0; i < ui.daysToLoad; i++) {
+    for (let i = 0; i < daysToLoad; i++) {
         let currentDate = new Date(calenderStartDate);
         currentDate.setDate(currentDate.getDate() + i);
         let tomorrowsDate = new Date(currentDate);
@@ -53,10 +50,10 @@ function printCalender() {
         if (currentDate.getDate() === todaysDate.getDate() && currentDate.getMonth() === todaysDate.getMonth() & currentDate.getYear() === todaysDate.getYear()) {
             dayType += ' today';
         }
-        calenderGridItem += `<div class="grid-item ${dayType}" style="width:${ui.gridWidth}px;position:absolute; top: 0px; left: ${ui.gridWidth * i}px"><span class="date-num">${currentDate.getDate()}</span><span class="day-char">${dayArr[currentDate.getDay()]}</span></div>`;
+        calenderGridItem += `<div class="grid-item ${dayType}" style="width:${gridWidth}px;position:absolute; top: 0px; left: ${gridWidth * i}px"><span class="date-num">${currentDate.getDate()}</span><span class="day-char">${dayArr[currentDate.getDay()]}</span></div>`;
 
         if (tomorrowsDate.getDate() == 1 || i === 364) {
-            monthBarContent += `<div class="month" style="width:${ui.gridWidth * (daysInCurMonth + 1)}px; left:${(ui.gridWidth * i) - daysInCurMonth * ui.gridWidth}px">${monthArr[currentDate.getMonth()]} ${currentDate.getFullYear()}</div>`
+            monthBarContent += `<div class="month" style="width:${gridWidth * (daysInCurMonth + 1)}px; left:${(gridWidth * i) - daysInCurMonth * gridWidth}px">${monthArr[currentDate.getMonth()]} ${currentDate.getFullYear()}</div>`
             daysInCurMonth = 0;
         }
         if (currentDate.getMonth() === tomorrowsDate.getMonth()) {

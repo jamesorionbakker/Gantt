@@ -430,7 +430,20 @@ span.date-num {
     position: absolute;
     pointer-events: none;
 }
-
+div.dependency-link {
+    display: none;
+    position: absolute;
+    width: 25px;
+    text-align: center;
+}
+i.dependency-link{
+    color: #ccc;
+    line-height: calc(var(--task-li-height) - var(--task-li-margin));
+}
+i.dependency-link:hover{
+    color: #555;
+    line-height: calc(var(--task-li-height) - var(--task-li-margin));
+}
 /*
 .tooltip:hover .tooltip-text {
   visibility: visible;

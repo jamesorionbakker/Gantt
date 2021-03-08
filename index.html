@@ -7,9 +7,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
     <link href="style.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+        integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA=="
+        crossorigin="anonymous" />
 
     <title>Gantt</title>
 </head>
@@ -20,7 +23,8 @@
     <div class="top-bar1"></div>
     <div class="top-bar2"></div>
     <div class="bottom-bar"></div>
-    <button type="button" class="add-item" data-bs-toggle="modal" data-bs-target="#newItemModal"><i class="fas fa-plus collapse-icon"></i></button>
+    <button type="button" class="add-item" data-bs-toggle="modal" data-bs-target="#newItemModal"><i
+            class="fas fa-plus collapse-icon"></i></button>
 
     <div class="gantt-container">
         <div class="tasks">
@@ -39,13 +43,15 @@
 
 
         </div>
+        <div id="createDependency"></div>
         <div class="calender-container">
-           <div class="dependency-container">
-               <div class="dependency-line"></div>
-           </div>
+            <div class="dependency-container">
+                <div class="dependency-line"></div>
+            </div>
             <div class="calender-target-container">
                 <div></div>
-                <div class="gantt-line-create tip"><span style="left: 0%;" class="tooltip-text">Tooltip text</span><span style="visibility: hidder; left: 100%;" class="tooltip-text">Tooltip text</span></div>
+                <div class="gantt-line-create tip"><span style="left: 0%;" class="tooltip-text">Tooltip text</span><span
+                        style="visibility: hidder; left: 100%;" class="tooltip-text">Tooltip text</span></div>
             </div>
             <div class="calender-item-container">
 
@@ -63,10 +69,12 @@
                 <div class="modal-header">
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                         <li class="nav-item" role="presentation">
-                            <a class="nav-link active" id="home-tab" data-bs-toggle="tab" href="#newTaskPane" role="tab" aria-controls="home" aria-selected="true">New Task</a>
+                            <a class="nav-link active" id="home-tab" data-bs-toggle="tab" href="#newTaskPane" role="tab"
+                                aria-controls="home" aria-selected="true">New Task</a>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#newGroupPane" role="tab" aria-controls="profile" aria-selected="false">New Group</a>
+                            <a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#newGroupPane" role="tab"
+                                aria-controls="profile" aria-selected="false">New Group</a>
                         </li>
                     </ul>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -76,12 +84,14 @@
                     <div id="newGroupFormError"></div>
                     <div class="tab-content" id="myTabContent">
                         <!--start new task pane-->
-                        <div class="tab-pane fade show active" id="newTaskPane" role="tabpanel" aria-labelledby="home-tab">
+                        <div class="tab-pane fade show active" id="newTaskPane" role="tabpanel"
+                            aria-labelledby="home-tab">
                             <form id="createNewTask">
                                 <div class="container-fluid">
 
                                     <div class="row">
-                                        <div class="col-sm-12"><label for="inputTaskName" class="form-label">Task Name</label></div>
+                                        <div class="col-sm-12"><label for="inputTaskName" class="form-label">Task
+                                                Name</label></div>
                                     </div>
                                     <div class="row mb-3">
                                         <div class="col-sm-10">
@@ -89,41 +99,49 @@
                                             <input type="text" class="form-control" id="inputTaskName" placeholder="">
                                         </div>
                                         <div class="col-sm-2">
-                                            <input type="color" class="form-control form-control-color" id="inputTaskColor" value="#1E77Eb" title="Choose your color">
+                                            <input type="color" class="form-control form-control-color"
+                                                id="inputTaskColor" value="#1E77Eb" title="Choose your color">
                                         </div>
                                     </div>
                                     <div class="row mb-3">
                                         <div class="col-sm-5">
                                             <label for="inputTaskGroup" class="form-label">Group</label>
-                                            <select class="form-select" id="inputTaskGroup" aria-label="Default select example">
+                                            <select class="form-select" id="inputTaskGroup"
+                                                aria-label="Default select example">
                                                 <option selected>Select a Group</option>
                                             </select>
                                         </div>
                                         <div class="col-sm-4">
                                             <label for="inputTaskAssignment" class="form-label">Assign to User</label>
-                                            <select class="form-select" id="inputTaskAssignment" aria-label="Default select example">
+                                            <select class="form-select" id="inputTaskAssignment"
+                                                aria-label="Default select example">
                                                 <option value='' selected>None</option>
                                             </select>
                                         </div>
                                         <div class="col-sm-3">
-                                            <label for="inputTaskPercentCompleted" class="form-label">% Completed</label>
-                                            <input type="number" class="form-control" id="inputTaskPercentCompleted" placeholder="">
+                                            <label for="inputTaskPercentCompleted" class="form-label">%
+                                                Completed</label>
+                                            <input type="number" class="form-control" id="inputTaskPercentCompleted"
+                                                placeholder="">
                                         </div>
                                     </div>
                                     <div class="row mb-5">
                                         <div class="col-sm-6">
                                             <label for="inputTaskStartDate" class="form-label">Start Date</label>
-                                            <input type="date" class="form-control" id="inputTaskStartDate" placeholder="Task Name">
+                                            <input type="date" class="form-control" id="inputTaskStartDate"
+                                                placeholder="Task Name">
                                         </div>
                                         <div class="col-sm-6">
                                             <label for="inputTaskEndDate" class="form-label">End Date</label>
-                                            <input type="date" class="form-control" id="inputTaskEndDate" placeholder="Task Name">
+                                            <input type="date" class="form-control" id="inputTaskEndDate"
+                                                placeholder="Task Name">
                                         </div>
                                     </div>
 
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" id="closeModal" data-bs-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-secondary" id="closeModal"
+                                        data-bs-dismiss="modal">Close</button>
                                     <button type="submit" class="btn btn-primary">Confirm Task</button>
                                 </div>
                             </form>
@@ -133,7 +151,8 @@
                             <form id="createNewGroup">
                                 <div class="container-fluid">
                                     <div class="row">
-                                        <div class="col-sm-12"><label for="inputGroupName" class="form-label">Group Name</label></div>
+                                        <div class="col-sm-12"><label for="inputGroupName" class="form-label">Group
+                                                Name</label></div>
                                     </div>
                                     <div class="row mb-5">
                                         <div class="col-sm-10">
@@ -141,12 +160,14 @@
                                             <input type="text" class="form-control" id="inputGroupName" placeholder="">
                                         </div>
                                         <div class="col-sm-2">
-                                            <input type="color" class="form-control form-control-color" id="inputGroupColor" value="#1E77Eb" title="Choose your color">
+                                            <input type="color" class="form-control form-control-color"
+                                                id="inputGroupColor" value="#1E77Eb" title="Choose your color">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" id="closeModal" data-bs-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-secondary" id="closeModal"
+                                        data-bs-dismiss="modal">Close</button>
                                     <button type="submit" class="btn btn-primary">Confirm Group</button>
                                 </div>
                             </form>
@@ -178,7 +199,8 @@
                             <div class="container-fluid">
 
                                 <div class="row">
-                                    <div class="col-sm-12"><label for="inputEditTaskName" class="form-label">Task Name</label></div>
+                                    <div class="col-sm-12"><label for="inputEditTaskName" class="form-label">Task
+                                            Name</label></div>
                                 </div>
                                 <div class="row mb-3">
                                     <div class="col-sm-10">
@@ -186,25 +208,30 @@
                                         <input type="text" class="form-control" id="inputEditTaskName" placeholder="">
                                     </div>
                                     <div class="col-sm-2">
-                                        <input type="color" class="form-control form-control-color" id="inputEditTaskColor" value="#1E77Eb" title="Choose your color">
+                                        <input type="color" class="form-control form-control-color"
+                                            id="inputEditTaskColor" value="#1E77Eb" title="Choose your color">
                                     </div>
                                 </div>
                                 <div class="row mb-3">
                                     <div class="col-sm-5">
                                         <label for="inputEditTaskGroup" class="form-label">Group</label>
-                                        <select class="form-select" id="inputEditTaskGroup" aria-label="Default select example">
+                                        <select class="form-select" id="inputEditTaskGroup"
+                                            aria-label="Default select example">
                                             <option selected>Select a Group</option>
                                         </select>
                                     </div>
                                     <div class="col-sm-4">
                                         <label for="inputEditTaskAssignment" class="form-label">Assign to User</label>
-                                        <select class="form-select" id="inputEditTaskAssignment" aria-label="Default select example">
+                                        <select class="form-select" id="inputEditTaskAssignment"
+                                            aria-label="Default select example">
                                             <option value='' selected>None</option>
                                         </select>
                                     </div>
                                     <div class="col-sm-3">
-                                        <label for="inputEditTaskPercentCompleted" class="form-label">% Completed</label>
-                                        <input type="number" class="form-control" id="inputEditTaskPercentCompleted" placeholder="">
+                                        <label for="inputEditTaskPercentCompleted" class="form-label">%
+                                            Completed</label>
+                                        <input type="number" class="form-control" id="inputEditTaskPercentCompleted"
+                                            placeholder="">
                                     </div>
                                 </div>
                                 <div class="row mb-5">
@@ -220,7 +247,8 @@
 
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" id="closeModal" data-bs-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-secondary" id="closeModal"
+                                    data-bs-dismiss="modal">Close</button>
                                 <button type="submit" class="btn btn-primary">Confirm Task</button>
                             </div>
                         </form>
@@ -233,9 +261,13 @@
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
 
-    <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"
+        integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous">
+    </script>
     <script src="easyFetchAsync.js"></script>
+    <script src="globals.js"></script>
     <script src="app.js"></script>
     <script src="loadUI.js"></script>
 </body>
