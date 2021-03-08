@@ -838,8 +838,11 @@ let tasks;
 if (store.get()) {
     tasks = new Tasks(store.get());
 } else {
+    let defTask = new Item();
+    defTask.name = 'This is a sample task';
+    defTask.type = 'task'
     console.log('there is nothing in storage');
-    tasks = new Tasks()
+    tasks = new Tasks({items: [defTask]})
 }
 
 let taskListActions = new class TaskListActions {
