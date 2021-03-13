@@ -9,7 +9,7 @@ let calenderStartDate = new Date(Date.now() - oneWeek);
 let calenderEndDate = new Date(calenderStartDate);
 calenderEndDate.setDate(calenderEndDate.getDate() + 365);
 let todaysDate = new Date();
-
+let tasks;
 
 const dateFloor = (input) => {
     const inputDate = new Date(input);

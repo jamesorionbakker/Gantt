@@ -1,9 +1,12 @@
+
 document.addEventListener('scroll', function (e) {
+    console.log('scroll');
     ui.tasks.style.left = `${window.pageXOffset + 75}px`;
     ui.calenderGrid.style.top = `${window.pageYOffset}px`;
     ui.monthBar.style.top = `${window.pageYOffset}px`;
     ui.taskHeader.style.top = `${window.pageYOffset}px`;
 })
+
 
 let dayArr = ['S', 'M', 'T', 'W', 'T', 'F', 'S']
 let monthArr = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -65,7 +68,22 @@ function printCalender() {
     ui.monthBar.innerHTML = monthBarContent;
 }
 printCalender();
-store.get();
-tasks.print();
+//store.get();
 
-//if(day.type === today){getDrink(cocktail,3)};
+async function loadData(){
+    console.log('loading data');
+    let response = await fetch('loadData.php');
+    let json = await response.json();
+    return json;
+}
+
+async function printUI(){
+    let res = await loadData()
+    tasks = new Tasks(res);
+    tasks.print();
+    addEventListeners();
+    console.log(res);
+}
+printUI();
+//tasks.print();
+

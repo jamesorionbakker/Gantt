@@ -17,22 +17,35 @@ let ui = new class UI {
 }
 
 const store = new class Store {
-    storageName = 'gantt'
 
-    get() {
-        let data = localStorage.getItem(this.storageName);
-        if (data) {
-            data = JSON.parse(data);
-            return data;
-            console.log(data);
-        } else {}
+    async set(data) {
+        console.log('posting data');
+        let formData = new FormData();
+        formData.append('data', JSON.stringify(data));
+        let response = await fetch('writeData.php', {
+            method: 'POST',
+            body: formData
+        });
+        response = await response.text();
+        console.log(response);
     }
-    set(object) {
-        localStorage.setItem(this.storageName, JSON.stringify(object));
-    }
-    clear() {
-        localStorage.clear();
-    }
+
+    // storageName = 'gantt'
+
+    // get() {
+    //     let data = localStorage.getItem(this.storageName);
+    //     if (data) {
+    //         data = JSON.parse(data);
+    //         return data;
+    //         console.log(data);
+    //     } else {}
+    // }
+    // set(object) {
+    //     localStorage.setItem(this.storageName, JSON.stringify(object));
+    // }
+    // clear() {
+    //     localStorage.clear();
+    // }
 }
 
 const newTaskForm = new class NewTaskForm {
@@ -298,12 +311,12 @@ class Item {
 
 class Tasks {
     constructor(data) {
-        if (data.items.length < 1) {
+        if (data.length < 1) {
             this.first = null;
             this.last = null;
         }
-        for (let i = 0; i < data.items.length; i++) {
-            let currIt = data.items[i]
+        for (let i = 0; i < data.length; i++) {
+            let currIt = data[i]
             if (currIt.previous === null && currIt.parent === null) {
                 this.first = currIt.id
             }
@@ -323,9 +336,7 @@ class Tasks {
         this.printGanttTargets();
         this.printTaskTargets();
         this.printDependencies();
-        store.set({
-            'items': this.saveArray,
-        })
+        store.set(this.saveArray)
     }
     /* REFACTORED 3/7
     rebuilt function to simplify traversing tree
@@ -344,14 +355,14 @@ class Tasks {
             this.printedItemArray.push(my);
         }
         let childrenVisible = (visible && my.expanded) ? true : false;
-        
+
         let response = '';
         if (my.type === 'group') {
-            response += `<div draggable="true" id="${my.id}" class="task-group-title"><div data-id="${my.id}" class="collapse-arrow"><i data-id=${my.id} class="${collapseArrow} collapse-icon"></i></div><span data-id="${my.id}" data-property="name" class="editable semi-bold">${my.name} <em>${my.id}</span><div class="task-progress"><span data-id="${my.id}" data-property="percentComplete" class="editable percentage">${my.percentComplete}%</span></div>
+            response += `<div draggable="true" id="${my.id}" class="task-group-title"><div data-id="${my.id}" class="collapse-arrow"><i data-id=${my.id} class="${collapseArrow} collapse-icon"></i></div><span data-id="${my.id}" data-property="name" class="editable semi-bold">${my.name}</span><div class="task-progress"><span data-id="${my.id}" data-property="percentComplete" class="editable percentage">${my.percentComplete}%</span></div>
             <div class="task-assignment"><span data-id="${my.id}" data-property="assignment" class="editable text">${my.assignment}</span></div><div class="task-actions" data-id="${my.id}"><i class="fas fa-plus"></i><i class="fas fa-trash-alt"></i></div></div>`
         }
         if (my.type === 'task') {
-            response += `<div draggable="true" id="${my.id}" class="task-li"><span data-id="${my.id}" data-property="name" class="editable ">${my.name} <em>${my.id}</em></span><div class="task-progress"><span data-id="${my.id}" data-property="percentComplete" class="editable percentage">${my.percentComplete}%</span></div>
+            response += `<div draggable="true" id="${my.id}" class="task-li"><span data-id="${my.id}" data-property="name" class="editable ">${my.name}</span><div class="task-progress"><span data-id="${my.id}" data-property="percentComplete" class="editable percentage">${my.percentComplete}%</span></div>
             <div class="task-assignment"><span data-id="${my.id}" data-property="assignment" class="editable text">${my.assignment}</span></div><div class="task-actions" data-id="${my.id}"><i class="fas fa-edit"></i><i class="fas fa-trash-alt"></i></div></div>`
         }
         if (my.firstChild) {
@@ -577,35 +588,29 @@ class Tasks {
             console.log('middle item');
             this[previous].next = next;
             this[next].previous = previous
-        } 
-        else if (parent) { //only, first or last child
+        } else if (parent) { //only, first or last child
             if (!previous && !next) { //only child
                 console.log('only child');
                 this[parent].firstChild = null;
                 this[parent].lastChild = null;
-            }
-            else if (!next) { //last child
+            } else if (!next) { //last child
                 console.log('last child');
                 this[parent].lastChild = previous;
                 this[previous].next = null;
-            }
-            else { //first child
+            } else { //first child
                 console.log('first child');
                 this[parent].firstChild = next;
                 this[next].previous = null;
             }
-        }
-        else { //first or last root
-            if(!next && !previous){ //only root
+        } else { //first or last root
+            if (!next && !previous) { //only root
                 console.log('only root');
                 this.first = null;
-            }
-            else if(next){ //first root
+            } else if (next) { //first root
                 console.log('first root');
                 this.first = next;
                 this[next].previous = null
-            }
-            else { //last root
+            } else { //last root
                 console.log('last root');
                 this.last = previous;
                 this[previous].next = null;
@@ -626,19 +631,16 @@ class Tasks {
     modifyDate(id, property, dateArg) {
         let startTime = (property === 'startDate') ? new Date(dateArg).getTime() : new Date(this[id].startDate).getTime()
         let endTime = (property === 'endDate') ? new Date(dateArg).getTime() : new Date(this[id].endDate).getTime()
-        if(property === 'startDate'){
-            if(startTime < endTime){
+        if (property === 'startDate') {
+            if (startTime < endTime) {
                 this[id].startDate = dateFloor(dateArg);
-            }
-            else {
+            } else {
                 this[id].startDate = dateFloor(new Date(endTime - oneDay))
             }
-        }
-        else {
-            if(startTime < endTime){
+        } else {
+            if (startTime < endTime) {
                 this[id].endDate = dateFloor(dateArg);
-            }
-            else {
+            } else {
                 this[id].endDate = dateFloor(new Date(startTime + oneDay))
             }
         }
@@ -834,16 +836,31 @@ let rearrangeList = new class RearrangeList {
 }
 
 
-let tasks;
-if (store.get()) {
-    tasks = new Tasks(store.get());
-} else {
-    let defTask = new Item();
-    defTask.name = 'This is a sample task';
-    defTask.type = 'task'
-    console.log('there is nothing in storage');
-    tasks = new Tasks({items: [defTask]})
-}
+
+// fetch
+// let myjson = fetch('backend.php')
+//     .then(function(res){
+//         return res.json();
+//     })
+//     .then(function(json){
+//         let data = {};
+//         data.items = json;
+//         tasks = new Tasks(data);
+//         console.log(tasks);   
+//     })
+
+
+//let tasks = new Tasks(json);
+// if (store.get()) {
+//     tasks = new Tasks(store.get());
+// } else {
+//     let defTask = new Item();
+//     defTask.name = 'This is a sample task';
+//     defTask.type = 'task'
+//     console.log('there is nothing in storage');
+//     tasks = new Tasks({items: [defTask]})
+// }
+
 
 let taskListActions = new class TaskListActions {
     constructor() {
@@ -1118,6 +1135,7 @@ newGroupForm.createGroupSubmit.addEventListener('submit', function (e) {
     newGroupForm.submit()
 }); //new task form submit
 
-
-$(ui.taskList).on('click', '.editable', inlineEdit.edit)
-$(ui.taskList).on('click', '.collapse-arrow', tasks.toggle.bind(tasks))
+function addEventListeners() {
+    $(ui.taskList).on('click', '.editable', inlineEdit.edit)
+    $(ui.taskList).on('click', '.collapse-arrow', tasks.toggle.bind(tasks))
+}
